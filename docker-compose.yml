@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: sf
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: taskmanager
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - nest-init
+
+volumes:
+   postgres:
+      name: nest-init-docker-db
+
+networks:
+   nest-init:
+
