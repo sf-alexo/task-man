@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Login from './Login';
 
 const App: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -52,6 +53,10 @@ const App: React.FC = () => {
         </div>
         <button type="submit">Register</button>
       </form>
+      <div>
+      <h1>My App</h1>
+      <Login /> {/* Render the Login component here */}
+    </div>
     </div>
   );
 };
