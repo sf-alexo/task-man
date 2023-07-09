@@ -15,7 +15,7 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const decoded = jwt_decode(token) as { username: string };
+      const decoded = jwt_decode(token) as { username: string, id: string };
       setUsername(decoded.username);
     }
   }, []);
@@ -30,14 +30,12 @@ const Login = () => {
       setSubmitting(false);
     } catch (error) {
       console.error(error);
-      // Handle error
     }
   };
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
     setUsername('FRIEND');
-    // Additional logic if needed
   };
 
   return (

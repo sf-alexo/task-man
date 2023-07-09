@@ -27,7 +27,7 @@ export class User {
   })
   password: string;
 
-    comparePassword(password: string): boolean {
+  comparePassword(password: string): boolean {
     return this.password === password;
   }
 }
