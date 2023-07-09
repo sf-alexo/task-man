@@ -21,4 +21,14 @@ export class UsersService {
   findUsersById(id: number) {
     return this.userRepository.findOneBy({ id: id });
   }
+
+  async validateUser(username: string, password: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { username } });
+
+    if (user && await user.comparePassword(password)) {
+      return user;
+    }
+
+    return null;
+  }
 }
