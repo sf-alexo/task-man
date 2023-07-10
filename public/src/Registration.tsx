@@ -53,7 +53,7 @@ const handleFormSubmit = async (values: {
   return (
     <div>
       <h1>Registration Form</h1>
-      <h2>Hello, {username}</h2>
+      <h2>Hello</h2>
       <Formik
         initialValues={{ username: '', password: '', email: '' }}
         validationSchema={RegistrationSchema}
