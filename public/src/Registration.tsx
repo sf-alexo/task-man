@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -12,6 +13,9 @@ const RegistrationSchema = Yup.object().shape({
 
 const Registration: React.FC = () => {
   const [username, setUsername] = useState<string>('');
+  const token = localStorage.getItem('token');
+  console.log(token);
+  const navigate = useNavigate();
 
 const handleFormSubmit = async (values: {
   username: string;
@@ -39,21 +43,18 @@ const handleFormSubmit = async (values: {
       localStorage.setItem('token', accessToken);
       const decoded = jwt_decode(accessToken) as { username: string };
       setUsername(decoded.username);
+      navigate('/manager');
     }
   } catch (error) {
     console.error(error);
   }
 };
 
-  const handleSignOut = () => {
-    localStorage.removeItem('token');
-    setUsername('');
-  };
 
   return (
     <div>
       <h1>Registration Form</h1>
-      <h2>Hello</h2>
+      <h2>Hello, {username}</h2>
       <Formik
         initialValues={{ username: '', password: '', email: '' }}
         validationSchema={RegistrationSchema}
@@ -76,11 +77,11 @@ const handleFormSubmit = async (values: {
             <ErrorMessage name="email" component="div" />
           </div>
           <button type="submit">Register</button>
-          <button type="button" onClick={handleSignOut}>
-            Sign Out
-          </button>
         </Form>
       </Formik>
+      <p>
+        Already have an account? <Link to="/">Log in</Link>
+      </p>
     </div>
   );
 };

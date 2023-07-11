@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -11,6 +12,7 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const [username, setUsername] = useState<string>('FRIEND');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -28,6 +30,7 @@ const Login = () => {
       const decoded = jwt_decode(accessToken) as { username: string };
       setUsername(decoded.username);
       setSubmitting(false);
+      navigate('/manager');
     } catch (error) {
       console.error(error);
     }
@@ -68,6 +71,9 @@ const Login = () => {
           </Form>
         )}
       </Formik>
+      <p>
+        Don't have an account? <Link to="/registration">Register</Link>
+      </p>
     </div>
   );
 };

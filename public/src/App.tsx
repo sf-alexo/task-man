@@ -1,5 +1,7 @@
 import React from 'react';
 import Login from './Login';
+import ManagerPage from './ManagerPage';
+import { BrowserRouter, Router, Route, Routes, Link } from "react-router-dom";
 import Registration from './Registration';
 import jwt_decode from 'jwt-decode';
 
@@ -15,18 +17,18 @@ const App: React.FC = () => {
       setUsername(decoded.username);
     }
   }, [token]);
-  
+
   return (
     <div>
-      <h1>My App</h1>
-      <Registration /> {/* Render the RegistrationForm component */}
-      <Login /> {/* Render the Login component */}
-            {token && (
-        <div>
-          {username && <h3>Username: {username}</h3>}
-        </div>
-      )}
+      <BrowserRouter>
+        <Routes>
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/manager" element={<ManagerPage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
+
   );
 };
 
