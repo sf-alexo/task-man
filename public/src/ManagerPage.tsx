@@ -8,10 +8,11 @@ const ManagerPage = () => {
   const [username, setUsername] = useState<string>('FRIEND');
   const [categories, setCategories] = useState<Category[]>([]);
   const [showCreatePopup, setShowCreatePopup] = useState<boolean>(false);
+  const [newCategoryName, setNewCategoryName] = useState<string>('');
   const [showEditPopup, setShowEditPopup] = useState<boolean>(false);
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
-  const [newCategoryName, setNewCategoryName] = useState<string>('');
-
+  const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
+  const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,8 +67,6 @@ const ManagerPage = () => {
   };
 
   const handleUpdateCategory = async () => {
-    if (!editCategoryId) return;
-
     try {
       const token = localStorage.getItem('token');
       const decoded = jwt_decode(token || '') as { id: string };
@@ -82,13 +81,31 @@ const ManagerPage = () => {
       fetchCategories();
       setNewCategoryName('');
       setShowEditPopup(false);
+      setEditCategoryId(null);
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleDeleteCategory = (categoryId: number) => {
-    console.log('Delete Category:', categoryId);
+    setShowDeletePopup(true);
+    setDeleteCategoryId(categoryId);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/categories/${deleteCategoryId}`);
+      fetchCategories();
+      setShowDeletePopup(false);
+      setDeleteCategoryId(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false);
+    setDeleteCategoryId(null);
   };
 
   return (
@@ -142,6 +159,17 @@ const ManagerPage = () => {
             Update
           </button>
           <button type="button" onClick={() => setShowEditPopup(false)}>
+            Cancel
+          </button>
+        </div>
+      )}
+      {showDeletePopup && (
+        <div className="delete-popup">
+          <p>Are you sure you want to delete this category?</p>
+          <button type="button" onClick={handleConfirmDelete}>
+            Yes
+          </button>
+          <button type="button" onClick={handleCancelDelete}>
             Cancel
           </button>
         </div>
