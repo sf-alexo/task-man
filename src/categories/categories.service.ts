@@ -52,4 +52,14 @@ export class CategoriesService {
 
     return this.categoryRepository.save(category);
   }
+
+  async deleteCategory(id: number): Promise<void> {
+    const category = await this.categoryRepository.findOneBy({ id: id });
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    await this.categoryRepository.remove(category);
+  }
 }
