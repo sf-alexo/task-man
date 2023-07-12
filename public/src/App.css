@@ -36,3 +36,35 @@
     transform: rotate(360deg);
   }
 }
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.row h3 {
+  margin-right: 10px;
+}
+
+.row p {
+  margin: 0;
+}
+

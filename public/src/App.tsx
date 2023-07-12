@@ -4,6 +4,7 @@ import ManagerPage from './ManagerPage';
 import { BrowserRouter, Router, Route, Routes, Link } from "react-router-dom";
 import Registration from './Registration';
 import jwt_decode from 'jwt-decode';
+import './App.css';
 
 const App: React.FC = () => {
   const [token, setToken] = React.useState<string | null>(localStorage.getItem('token'));
