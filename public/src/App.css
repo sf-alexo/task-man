@@ -37,7 +37,8 @@
   }
 }
 
-.popup {
+.create-popup,
+.edit-popup {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -47,7 +48,6 @@
   border: 1px solid #ccc;
   padding: 16px;
 }
-
 
 .container {
   display: flex;
@@ -67,4 +67,3 @@
 .row p {
   margin: 0;
 }
-
