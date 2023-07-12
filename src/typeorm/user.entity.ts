@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Category } from 'src/typeorm';
 
 @Entity()
 export class User {
@@ -26,6 +27,7 @@ export class User {
     default: '',
   })
   password: string;
+
 
   comparePassword(password: string): boolean {
     return this.password === password;
