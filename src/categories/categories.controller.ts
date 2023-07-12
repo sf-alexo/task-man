@@ -8,6 +8,7 @@ import { CategoriesService } from './categories.service';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  //curl http://localhost:3000/categories
   @Get()
   getCategories() {
     return this.categoriesService.getCategories();
