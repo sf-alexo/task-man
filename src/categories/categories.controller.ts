@@ -3,10 +3,14 @@ import { CreateCategoryDto } from './dtos/CreateCategory.dto';
 import { UpdateCategoryDto } from './dtos/UpdateCategory.dto';
 import { Category } from 'src/typeorm';
 import { CategoriesService } from './categories.service';
+import { TasksService } from '../tasks/tasks.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+    constructor(
+    private readonly categoriesService: CategoriesService,
+    private readonly tasksService: TasksService,
+  ) {}
 
   //curl http://localhost:3000/categories
   @Get()
@@ -34,7 +38,8 @@ export class CategoriesController {
   // curl -X DELETE http://localhost:3000/categories/1
   @Delete(':id')
   async deleteCategory(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.categoriesService.deleteCategory(id);
+    await this.tasksService.deleteTasksByCategoryId(id);
+    await this.categoriesService.deleteCategory(id);
   }
 
 }

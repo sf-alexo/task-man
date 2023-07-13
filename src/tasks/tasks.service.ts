@@ -72,4 +72,9 @@ export class TasksService {
 
     await this.taskRepository.remove(task);
   }
+
+  async deleteTasksByCategoryId(categoryId: number): Promise<void> {
+    const tasks = await this.taskRepository.find({ where: { taskId: categoryId } });
+    await this.taskRepository.remove(tasks);
+  }
 }
