@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link  } from 'react-router-dom';
 import axios from 'axios';
 import { Task } from '../../src/typeorm/task.entity';
 
@@ -25,6 +25,7 @@ const TaskList: React.FC = () => {
   return (
     <div>
       <h1>{categoryName} {categoryId}</h1>
+      <Link to={`/${categoryName}/${categoryId}/add-task`}>Add Task</Link>
       <div className="card-container">
         {tasks.length > 0 ? (
           tasks.map((task) => (
