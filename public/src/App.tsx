@@ -5,6 +5,7 @@ import Registration from './Registration';
 import ManagerPage from './ManagerPage';
 import TaskList from './TaskList';
 import AddTask from './AddTask';
+import EditTask from './EditTask';
 import jwt_decode from 'jwt-decode';
 import './App.css';
 
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/manager" element={<ManagerPage />} />
           <Route path=":categoryName/:categoryId" element={<TaskList />} />
           <Route path=":categoryName/:categoryId/add-task/" element={<AddTask />} />
+          <Route path=":categoryName/:categoryId/edit-task/:id" element={<EditTask />} />
         </Routes>
       </BrowserRouter>
     </div>

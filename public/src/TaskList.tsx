@@ -35,6 +35,7 @@ const TaskList: React.FC = () => {
                 <p>Start Date: {task.dateStart.toString()}</p>
                 <p>End Date: {task.dateEnd.toString()}</p>
               </div>
+              <Link to={`/${categoryName}/${categoryId}/edit-task/${task.id}`}>Edit Task</Link>
             </div>
           ))
         ) : (

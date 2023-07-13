@@ -20,6 +20,10 @@ export class TasksService {
     return this.taskRepository.find({ where: { taskId } });
   }
 
+  async findTaskById(id: number) {
+    return this.taskRepository.findOneBy({ id: id });
+  }
+
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const { name, dateStart, dateEnd, taskId } = createTaskDto;
 
