@@ -3,17 +3,25 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column('date')
-  dateStart: Date;
+  dateStart!: Date;
 
   @Column('date')
-  dateEnd: Date;
+  dateEnd!: Date;
 
   @Column()
-  taskId: number;
+  taskId!: number;
+
+  constructor() {
+    this.id = 0;
+    this.name = '';
+    this.dateStart = new Date();
+    this.dateEnd = new Date();
+    this.taskId = 0;
+  }
 }

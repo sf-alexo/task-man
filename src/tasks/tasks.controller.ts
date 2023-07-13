@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Put, Delete, Param, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Post, Get, Put, Delete, Param, UsePipes, ValidationPipe, ParseIntPipe, Query } from '@nestjs/common';
 import { CreateTaskDto } from './dtos/CreateTask.dto';
 import { UpdateTaskDto } from './dtos/UpdateTask.dto';
 import { Task } from 'src/typeorm';
@@ -8,10 +8,14 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Get()
-  getTasks() {
+@Get()
+getTasks(@Query('taskId', new ParseIntPipe({ optional: true })) taskId?: number) {
+  if (taskId) {
+    return this.tasksService.getTasksByTaskId(taskId);
+  } else {
     return this.tasksService.getTasks();
   }
+}
 
   @Post('create')
   @UsePipes(ValidationPipe)
