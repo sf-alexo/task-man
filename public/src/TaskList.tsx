@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link  } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Task } from '../../src/typeorm/task.entity';
 
@@ -7,6 +7,8 @@ const TaskList: React.FC = () => {
   const { categoryId } = useParams();
   const { categoryName } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [showDeleteTaskPopup, setShowDeleteTaskPopup] = useState<boolean>(false);
+  const [deleteTaskId, setDeleteTaskId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -22,9 +24,36 @@ const TaskList: React.FC = () => {
     fetchTasks();
   }, [categoryId]);
 
+  const deleteTask = async (taskId: number) => {
+    try {
+      await axios.delete(`http://localhost:3000/tasks/${taskId}`);
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const confirmDelete = (taskId: number) => {
+    setDeleteTaskId(taskId);
+    setShowDeleteTaskPopup(true);
+  };
+
+  const handleConfirmDeleteTask = () => {
+    if (deleteTaskId !== null) {
+      deleteTask(deleteTaskId);
+    }
+    setShowDeleteTaskPopup(false);
+    setDeleteTaskId(null);
+  };
+
+  const handleCancelDeleteTask = () => {
+    setShowDeleteTaskPopup(false);
+    setDeleteTaskId(null);
+  };
+
   return (
     <div>
-    <Link to={'/manager'}>Back to Task Manager</Link>
+      <Link to={'/manager'}>Back to Task Manager</Link>
       <h1>{categoryName} {categoryId}</h1>
       <Link to={`/${categoryName}/${categoryId}/add-task`}>Add Task</Link>
       <div className="card-container">
@@ -36,6 +65,7 @@ const TaskList: React.FC = () => {
                 <p>Start Date: {task.dateStart.toString()}</p>
                 <p>End Date: {task.dateEnd.toString()}</p>
               </div>
+              <button onClick={() => confirmDelete(task.id)}>Delete</button>
               <Link to={`/${categoryName}/${categoryId}/edit-task/${task.id}`}>Edit Task</Link>
             </div>
           ))
@@ -43,6 +73,17 @@ const TaskList: React.FC = () => {
           <p>No tasks found</p>
         )}
       </div>
+      {showDeleteTaskPopup && (
+        <div className="delete-popup">
+          <p>Are you sure you want to delete this task?</p>
+          <button type="button" onClick={handleConfirmDeleteTask}>
+            Yes
+          </button>
+          <button type="button" onClick={handleCancelDeleteTask}>
+            No
+          </button>
+        </div>
+      )}
     </div>
   );
 };
