@@ -13,7 +13,7 @@ const TaskList: React.FC = () => {
       try {
         const response = await axios.get(`http://localhost:3000/tasks?taskId=${categoryId}`);
         console.log(response.data);
-        setTasks(response.data);
+        setTasks(response.data.sort((a: Task, b: Task) => b.id - a.id));
       } catch (error) {
         console.error(error);
       }
@@ -24,6 +24,7 @@ const TaskList: React.FC = () => {
 
   return (
     <div>
+    <Link to={'/manager'}>Back to Task Manager</Link>
       <h1>{categoryName} {categoryId}</h1>
       <Link to={`/${categoryName}/${categoryId}/add-task`}>Add Task</Link>
       <div className="card-container">

@@ -36,11 +36,6 @@ const Login = () => {
     }
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem('token');
-    setUsername('FRIEND');
-  };
-
   return (
     <div>
       <h1>Login</h1>
@@ -64,9 +59,6 @@ const Login = () => {
             </div>
             <button type="submit" disabled={isSubmitting}>
               Login
-            </button>
-            <button type="button" onClick={handleSignOut}>
-              Sign Out
             </button>
           </Form>
         )}

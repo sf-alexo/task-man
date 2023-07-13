@@ -7,6 +7,7 @@ import { Category } from '../../src/typeorm/category.entity';
 const ManagerPage = () => {
   const [username, setUsername] = useState<string>('FRIEND');
   const [categories, setCategories] = useState<Category[]>([]);
+  const [taskCounts, setTaskCounts] = useState<Record<number, number>>({});
   const [showCreatePopup, setShowCreatePopup] = useState<boolean>(false);
   const [newCategoryName, setNewCategoryName] = useState<string>('');
   const [showEditPopup, setShowEditPopup] = useState<boolean>(false);
@@ -26,14 +27,32 @@ const ManagerPage = () => {
     }
   }, [navigate]);
 
-  const fetchCategories = async () => {
+  const fetchTaskCount = async (categoryId: number) => {
     try {
-      const response = await axios.get('http://localhost:3000/categories');
-      setCategories(response.data);
+      const response = await axios.get(`http://localhost:3000/tasks?taskId=${categoryId}`);
+      const count = response.data.length;
+      setTaskCounts((prevTaskCounts) => ({
+        ...prevTaskCounts,
+        [categoryId]: count,
+      }));
     } catch (error) {
       console.error(error);
     }
   };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/categories');
+      setCategories(response.data);
+      response.data.forEach((category: Category) => {
+        fetchTaskCount(category.id);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
@@ -139,6 +158,7 @@ const ManagerPage = () => {
         {categories.map((category) => (
           <div className="row" key={category.id}>
             <h3>{category.name}</h3>
+            <span>Tasks: {taskCounts[category.id]}</span>
             <p>Date: {category.dateCreated.toString()}</p>
             <div className="actions">
               <button type="button" onClick={() => handleEditCategory(category.id)}>
