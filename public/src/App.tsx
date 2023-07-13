@@ -3,6 +3,7 @@ import Login from './Login';
 import ManagerPage from './ManagerPage';
 import { BrowserRouter, Router, Route, Routes, Link } from "react-router-dom";
 import Registration from './Registration';
+import TaskList from './TaskList';
 import jwt_decode from 'jwt-decode';
 import './App.css';
 
@@ -26,6 +27,7 @@ const App: React.FC = () => {
         <Route path="/registration" element={<Registration />} />
         <Route path="/" element={<Login />} />
         <Route path="/manager" element={<ManagerPage />} />
+        <Route path=":categoryName/:categoryId" element={<TaskList />} />
         </Routes>
       </BrowserRouter>
     </div>

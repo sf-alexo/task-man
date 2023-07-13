@@ -41,6 +41,10 @@ const ManagerPage = () => {
     navigate('/');
   };
 
+  const handleMoreButtonClick = (categoryId: number, categoryName: string) => {
+    navigate(`/${categoryName}/${categoryId}`);
+  };
+
   const handleCreateCategory = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -142,6 +146,9 @@ const ManagerPage = () => {
               </button>
               <button type="button" onClick={() => handleDeleteCategory(category.id)}>
                 Delete
+              </button>
+              <button type="button" onClick={() => handleMoreButtonClick(category.id, category.name)}>
+                More
               </button>
             </div>
           </div>
