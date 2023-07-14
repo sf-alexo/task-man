@@ -42,8 +42,8 @@ services:
       DB_NAME: ${DB_NAME}
     ports:
       - 3000:3000
-    volumes:
-      - ./public:/app/public
+      - 3001:3001
+
 
 volumes:
   postgres-data:
