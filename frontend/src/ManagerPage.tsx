@@ -158,8 +158,8 @@ const ManagerPage = () => {
         {categories.map((category) => (
           <div className="row" key={category.id}>
             <h3>{category.name}</h3>
-            <span>Tasks: {taskCounts[category.id]}</span>
-            <p>Date: {category.dateCreated.toString()}</p>
+            <span>{taskCounts[category.id]} tasks</span>
+            <div className="date">Date: {category.dateCreated.toString().slice(0, 10)}</div>
             <div className="actions">
               <button type="button" onClick={() => handleEditCategory(category.id)}>
                 Edit
