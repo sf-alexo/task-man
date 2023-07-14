@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
@@ -16,18 +16,9 @@ const ManagerPage = () => {
   const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decoded = jwt_decode(token) as { username: string, id: string };
-      setUsername(decoded.username);
-      fetchCategories();
-    } else {
-      navigate('/');
-    }
-  }, [navigate]);
 
-  const fetchTaskCount = async (categoryId: number) => {
+
+  const fetchTaskCount = useCallback(async (categoryId: number) => {
     try {
       const response = await axios.get(`http://localhost:3000/tasks?taskId=${categoryId}`);
       const count = response.data.length;
@@ -38,9 +29,9 @@ const ManagerPage = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, []);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:3000/categories');
       setCategories(response.data);
@@ -50,9 +41,7 @@ const ManagerPage = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-
+  }, [fetchTaskCount]);
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
@@ -130,6 +119,17 @@ const ManagerPage = () => {
     setShowDeletePopup(false);
     setDeleteCategoryId(null);
   };
+
+  useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const decoded = jwt_decode(token) as { username: string, id: string };
+    setUsername(decoded.username);
+    fetchCategories();
+  } else {
+    navigate('/');
+  }
+}, [fetchCategories, navigate]);
 
   return (
     <div>
