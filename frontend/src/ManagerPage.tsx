@@ -16,8 +16,6 @@ const ManagerPage = () => {
   const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
 
-
-
   const fetchTaskCount = useCallback(async (categoryId: number) => {
     try {
       const response = await axios.get(`http://localhost:3000/tasks?taskId=${categoryId}`);
@@ -74,6 +72,10 @@ const ManagerPage = () => {
   };
 
   const handleEditCategory = (categoryId: number) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    if (category) {
+      setNewCategoryName(category.name);
+    }
     setShowEditPopup(true);
     setEditCategoryId(categoryId);
   };
@@ -121,15 +123,15 @@ const ManagerPage = () => {
   };
 
   useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    const decoded = jwt_decode(token) as { username: string, id: string };
-    setUsername(decoded.username);
-    fetchCategories();
-  } else {
-    navigate('/');
-  }
-}, [fetchCategories, navigate]);
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwt_decode(token) as { username: string, id: string };
+      setUsername(decoded.username);
+      fetchCategories();
+    } else {
+      navigate('/');
+    }
+  }, [fetchCategories, navigate]);
 
   return (
     <div>
