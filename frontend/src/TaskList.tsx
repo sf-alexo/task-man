@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Task } from '../../src/typeorm/task.entity';
+import { Task } from '../../backend/src/typeorm/task.entity';
 
 const TaskList: React.FC = () => {
   const { categoryId } = useParams();

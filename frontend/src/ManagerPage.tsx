@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import { Category } from '../../src/typeorm/category.entity';
+import { Category } from '../../backend/src/typeorm/category.entity';
 
 const ManagerPage = () => {
   const [username, setUsername] = useState<string>('FRIEND');

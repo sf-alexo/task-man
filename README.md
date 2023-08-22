@@ -4,12 +4,12 @@ Dockerization is in progress...
 See variables in .env file
 
 # Starting the backend in 3000 port
-1. Go to project root
+1. Go to /backend folder
 2. Run *npm i* 
 3. Run *npm run start:dev* 
 
 # Starting the frontend in 3001 port
-1. Go to /public folder
+1. Go to /frontend folder
 2. Run *npm i* 
 3. Run *npm start* 
 
