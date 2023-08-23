@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
-import { ObjectType, Field, Int } from '@nestjs/graphql'; // Import necessary decorators
+import { ObjectType, Field, Int } from '@nestjs/graphql'; 
 
 @Entity()
-@ObjectType() // Decorate with ObjectType to define GraphQL type
+@ObjectType() 
 export class Category {
   @PrimaryGeneratedColumn()
-  @Field(() => Int) // Decorate with Field to define GraphQL field
+  @Field(() => Int)
   id!: number;
 
   @Column()
