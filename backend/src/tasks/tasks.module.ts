@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from 'src/typeorm';
 import { TasksResolver } from './tasks.resolver';
-import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 
 @Module({

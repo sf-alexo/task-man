@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from 'src/typeorm';
-import { CreateTaskDto } from './dtos/CreateTask.dto';
-import { UpdateTaskDto } from './dtos/UpdateTask.dto';
+import { CreateTaskInput } from './dtos/create-task.input';
+import { UpdateTaskInput } from './dtos/update-task.input';
 
 @Injectable()
 export class TasksService {
@@ -20,12 +20,12 @@ export class TasksService {
     return this.taskRepository.find({ where: { taskId } });
   }
 
-  async findTaskById(id: number) {
+  async findTaskById(id: number): Promise<Task | undefined> {
     return this.taskRepository.findOneBy({ id: id });
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const { name, dateStart, dateEnd, taskId } = createTaskDto;
+  async createTask(createTaskInput: CreateTaskInput): Promise<Task> {
+    const { name, dateStart, dateEnd, taskId } = createTaskInput;
 
     const newTask = this.taskRepository.create({
       name,
@@ -37,33 +37,33 @@ export class TasksService {
     return this.taskRepository.save(newTask);
   }
 
-  async updateTask(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+  async updateTask(id: number, updateTaskInput: UpdateTaskInput): Promise<Task> {
     const task = await this.taskRepository.findOneBy({ id: id });
 
     if (!task) {
       throw new NotFoundException('Task not found');
     }
 
-    if (updateTaskDto.name) {
-      task.name = updateTaskDto.name;
+    if (updateTaskInput.name !== undefined) {
+      task.name = updateTaskInput.name;
     }
 
-    if (updateTaskDto.dateStart) {
-      task.dateStart = updateTaskDto.dateStart;
+    if (updateTaskInput.dateStart !== undefined) {
+      task.dateStart = updateTaskInput.dateStart;
     }
 
-    if (updateTaskDto.dateEnd) {
-      task.dateEnd = updateTaskDto.dateEnd;
+    if (updateTaskInput.dateEnd !== undefined) {
+      task.dateEnd = updateTaskInput.dateEnd;
     }
 
-    if (updateTaskDto.taskId) {
-      task.taskId = updateTaskDto.taskId;
+    if (updateTaskInput.taskId !== undefined) {
+      task.taskId = updateTaskInput.taskId;
     }
 
     return this.taskRepository.save(task);
   }
 
-  async deleteTask(id: number): Promise<void> {
+  async deleteTask(id: number): Promise<Task> {
     const task = await this.taskRepository.findOneBy({ id: id });
 
     if (!task) {
@@ -71,6 +71,7 @@ export class TasksService {
     }
 
     await this.taskRepository.remove(task);
+    return task;
   }
 
   async deleteTasksByCategoryId(categoryId: number): Promise<void> {

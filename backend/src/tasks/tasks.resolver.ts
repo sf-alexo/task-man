@@ -33,8 +33,9 @@ export class TasksResolver {
     return this.tasksService.updateTask(id, updateTaskInput);
   }
 
-  @Mutation(() => Task) // Specify the return type here
-  deleteTask(@Args('id', { type: () => Int }) id: number) {
-    return this.tasksService.deleteTask(id);
-  }
+@Mutation(() => Task)
+async deleteTask(@Args('id', { type: () => Int }) id: number) {
+  const deletedTask = await this.tasksService.deleteTask(id);
+  return deletedTask; // Return the deleted task
+}
 }
