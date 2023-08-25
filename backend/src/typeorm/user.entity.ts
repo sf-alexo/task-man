@@ -1,18 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Category } from 'src/typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ObjectType, Field, InputType, Int } from '@nestjs/graphql';
 
 @Entity()
+@ObjectType() 
 export class User {
   @PrimaryGeneratedColumn({
     type: 'bigint',
     name: 'user_id',
   })
+  @Field(() => Int) 
   id: number;
 
   @Column({
     nullable: false,
     default: '',
   })
+  @Field() 
   username: string;
 
   @Column({
@@ -20,6 +23,7 @@ export class User {
     nullable: false,
     default: '',
   })
+  @Field() 
   email: string;
 
   @Column({
@@ -27,6 +31,9 @@ export class User {
     default: '',
   })
   password: string;
+
+  @Field() 
+  accessToken: string; 
 
 
   comparePassword(password: string): boolean {

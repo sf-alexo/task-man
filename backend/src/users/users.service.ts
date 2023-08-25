@@ -12,13 +12,17 @@ export class UsersService {
     private readonly jwtService: JwtService,
   ) {}
       
-  createUser(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const newUser = this.userRepository.create(createUserDto);
-    this.userRepository.save(newUser);
+    await this.userRepository.save(newUser);
 
     const payload = { username: newUser.username, id: newUser.id, email: newUser.email };
     const accessToken = this.jwtService.sign(payload);
-    return { accessToken };
+
+    // Attach accessToken to the newUser object
+    newUser.accessToken = accessToken;
+
+    return newUser;
   }
 
   getUsers() {
