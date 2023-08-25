@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import { ObjectType, Field, InputType, Int } from '@nestjs/graphql';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 @ObjectType() 
@@ -35,8 +36,12 @@ export class User {
   @Field() 
   accessToken: string; 
 
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 
   comparePassword(password: string): boolean {
-    return this.password === password;
+    return bcrypt.compareSync(password, this.password);
   }
 }

@@ -8,7 +8,6 @@ Post,
 UsePipes,
 ValidationPipe,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/users.service';
 
 @Controller('users')
@@ -25,9 +24,4 @@ export class UsersController {
     return this.userService.findUsersById(id);
   }
   
-  @Post('create')
-  @UsePipes(ValidationPipe)
-  createUsers(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
-  }
 }
