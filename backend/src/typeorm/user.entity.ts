@@ -2,6 +2,12 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import { ObjectType, Field, InputType, Int } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 
+@ObjectType() 
+export class AuthPayload {
+  @Field()
+  accessToken: string;
+}
+
 @Entity()
 @ObjectType() 
 export class User {
@@ -35,11 +41,6 @@ export class User {
 
   @Field() 
   accessToken: string; 
-
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
 
   comparePassword(password: string): boolean {
     return bcrypt.compareSync(password, this.password);

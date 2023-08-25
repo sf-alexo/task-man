@@ -5,19 +5,25 @@ import { UsersService } from '../users/users.service';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(username: string, password: string): Promise<{ accessToken: string }> {
+  async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.validateUser(username, password);
-    if (!user) {
-      throw new Error('Invalid credentials');
+
+    if (user) {
+      const { id, username, email } = user;
+      return { id, username, email };
     }
 
-    const payload = { username: user.username, id: user.id, email: user.email };
-    const accessToken = this.jwtService.sign(payload);
+    return null;
+  }
 
-    return { accessToken };
+  async login(user: any) {
+    const payload = { sub: user.id, username: user.username, email: user.email };
+    const accessToken = this.jwtService.sign(payload);
+    user.accessToken = accessToken;
+    return user;
   }
 }

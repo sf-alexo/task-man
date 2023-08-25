@@ -48,13 +48,24 @@ async createUser(input: CreateUserInput): Promise<User> {
     return this.userRepository.findOneBy({ id: id });
   }
 
-  async validateUser(username: string, password: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { username } });
+async validateUser(username: string, password: string): Promise<User> {
+  console.log(`Validating user: ${username}`);
+  const user = await this.userRepository.findOne({ where: { username } });
 
-    if (user && await user.comparePassword(password)) {
-      return user;
-    }
-
+  if (!user) {
+    console.log(`User not found: ${username}`);
     return null;
   }
+
+  console.log(`Comparing passwords for user: ${username}`);
+  const passwordsMatch = await user.comparePassword(password);
+  if (passwordsMatch) {
+    console.log(`Passwords match for user: ${username}`);
+    return user;
+  }
+
+  console.log(`Passwords do not match for user: ${username}`);
+  return null;
+}
+
 }
