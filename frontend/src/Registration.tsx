@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useMutation } from '@apollo/client';
 import { Link, useNavigate } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+
+// Import the GraphQL mutation
+import { CREATE_USER_MUTATION } from './graphql/mutations'; // Adjust the path as needed
 
 const RegistrationSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -13,25 +16,31 @@ const RegistrationSchema = Yup.object().shape({
 
 const Registration: React.FC = () => {
   const [username, setUsername] = useState<string>('');
-  const token = localStorage.getItem('token');
-  console.log(token);
   const navigate = useNavigate();
 
-const handleFormSubmit = async (values: {
-  username: string;
-  password: string;
-  email: string;
-}) => {
-  try {
-    const response = await axios.post(
-      'http://localhost:3000/users/create',
-      values
-    );
-    console.log(response.status); // Handle the response data as needed
+  // Use the Apollo useMutation hook
+  const [createUser] = useMutation(CREATE_USER_MUTATION);
+
+  const handleFormSubmit = async (values: {
+    username: string;
+    password: string;
+    email: string;
+  }) => {
+    try {
+      const { data } = await createUser({
+        variables: {
+          createUserInput: {
+            username: values.username,
+            password: values.password,
+            email: values.email,
+          },
+        },
+      });
 
     // Check if the registration was successful
-    if (response.status === 201) {
-      // Auto-login after successful registration
+    if (data.createUser) {
+      alert('Grayskull');
+      /* Auto-login after successful registration
       const loginResponse = await axios.post(
         'http://localhost:3000/auth/login',
         {
@@ -43,6 +52,7 @@ const handleFormSubmit = async (values: {
       localStorage.setItem('token', accessToken);
       const decoded = jwt_decode(accessToken) as { username: string };
       setUsername(decoded.username);
+      */
       navigate('/manager');
     }
   } catch (error) {
