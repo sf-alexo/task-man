@@ -18,7 +18,7 @@ export class CategoriesResolver {
     return this.categoriesService.createCategory(createCategoryInput);
   }
 
-  @Mutation(() => Boolean) // Return type can be Boolean to indicate success
+  @Mutation(() => Boolean) 
 async deleteCategory(@Args('id', { type: () => Int }) id: number): Promise<boolean> {
   await this.categoriesService.deleteCategory(id);
   return true; // Indicate successful deletion

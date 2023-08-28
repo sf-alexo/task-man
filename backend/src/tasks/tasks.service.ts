@@ -63,7 +63,7 @@ export class TasksService {
     return this.taskRepository.save(task);
   }
 
-  async deleteTask(id: number): Promise<Task> {
+  async deleteTask(id: number): Promise<void> {
     const task = await this.taskRepository.findOneBy({ id: id });
 
     if (!task) {
@@ -71,7 +71,6 @@ export class TasksService {
     }
 
     await this.taskRepository.remove(task);
-    return task;
   }
 
   async deleteTasksByCategoryId(categoryId: number): Promise<void> {
