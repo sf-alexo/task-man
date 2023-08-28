@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
 import * as Yup from 'yup';
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+
+
+import { LOGIN_MUTATION } from './graphql/mutations';
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -17,18 +20,25 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const decoded = jwt_decode(token) as { username: string, id: string };
+      const decoded = jwt_decode(token) as { username: string; id: string };
       setUsername(decoded.username);
     }
   }, []);
 
+  const [login] = useMutation(LOGIN_MUTATION);
+
   const handleSubmit = async (values: any, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', values);
-      const { accessToken } = response.data;
+      const { data } = await login({
+        variables: {
+          username: values.username,
+          password: values.password,
+        },
+      });
+
+      const { accessToken, username } = data.login;
       localStorage.setItem('token', accessToken);
-      const decoded = jwt_decode(accessToken) as { username: string };
-      setUsername(decoded.username);
+      setUsername(username);
       setSubmitting(false);
       navigate('/manager');
     } catch (error) {
@@ -71,3 +81,4 @@ const Login = () => {
 };
 
 export default Login;
+
