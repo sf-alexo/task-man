@@ -32,12 +32,11 @@ export const CREATE_CATEGORY = gql`
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($id: Int!, $updateCategoryInput: UpdateCategoryInput!) {
+  mutation UpdateCategory($id: Int!, $updateCategoryInput: updateCategoryInput!) {
     updateCategory(id: $id, updateCategoryInput: $updateCategoryInput) {
       id
       name
       dateCreated
-      userId
     }
   }
 `;

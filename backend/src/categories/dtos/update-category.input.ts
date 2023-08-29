@@ -1,13 +1,11 @@
-import { InputType, Field, Int, Float }from '@nestjs/graphql';
+import { InputType, Field, Int }from '@nestjs/graphql';
 
 @InputType()
 export class UpdateCategoryInput {
-  @Field(() => Float)
-  id: number;
 
-  @Field({ nullable: true }) // You can mark fields as nullable if they're optional
+  @Field({ nullable: true }) 
   name?: string;
 
-  @Field(() => Int, { nullable: true }) // Example of a nullable field
+  @Field(() => Int, { nullable: true })
   userId?: number;
 }

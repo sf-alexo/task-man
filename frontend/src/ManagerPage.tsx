@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import jwt_decode from 'jwt-decode';
 import { Category } from './types';
+import { ApolloError } from '@apollo/client';
 
 import { GET_CATEGORIES } from './graphql/queries';
 import { CREATE_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY } from './graphql/mutations';
@@ -62,30 +63,43 @@ const ManagerPage = () => {
     }
   };
 
-  const handleSaveEditedCategory = async (categoryId: number) => {
-    try {
-      const token = localStorage.getItem('token');
-      const decoded = jwt_decode(token || '') as { sub: string };
-      const userId = Number(decoded.sub);
+const handleSaveEditedCategory = async (categoryId: number) => {
+  try {
+    const token = localStorage.getItem('token');
+    const decoded = jwt_decode(token || '') as { sub: string };
+    const userId = Number(decoded.sub);
 
-      const { data } = await updateCategory({
-        variables: {
-          id: categoryId,
-          updateCategoryInput: {
-            name: editedCategoryName,
-            userId: userId,
-          },
+    const { data, errors } = await updateCategory({
+      variables: {
+        id: categoryId,
+        updateCategoryInput: {
+          name: editedCategoryName,
+          userId: userId,
         },
-      });
+      },
+    });
 
-      if (data.updateCategory) {
-        setEditingCategoryId(null);
-        setEditedCategoryName('');
-      }
-    } catch (error) {
-      console.error(error);
+    if (data.updateCategory) {
+      setEditingCategoryId(null);
+      setEditedCategoryName('');
     }
-  };
+  } catch (error) {
+    console.error('An error occurred:', error);
+
+     const apolloError = error as ApolloError;
+
+    if (apolloError.graphQLErrors) {
+      apolloError.graphQLErrors.forEach((graphQLError) => {
+        console.error('GraphQL Error:', graphQLError.message);
+      });
+    }
+
+    if (apolloError.networkError) {
+      console.error('Network Error:', apolloError.networkError.message);
+    }
+  }
+};
+
 
   const handleDeleteCategory = (categoryId: number) => {
     setDeleteCategoryId(categoryId);
@@ -190,6 +204,7 @@ const ManagerPage = () => {
                     </button>
                   </div>
                 )}
+                <Link to={`/${category.name}/${category.id}`}>More</Link>
               </>
             )}
           </div>
