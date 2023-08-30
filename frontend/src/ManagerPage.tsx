@@ -68,6 +68,15 @@ const handleSaveEditedCategory = async (categoryId: number) => {
     const token = localStorage.getItem('token');
     const decoded = jwt_decode(token || '') as { sub: string };
     const userId = Number(decoded.sub);
+    console.log(userId, {
+      variables: {
+        id: categoryId,
+        updateCategoryInput: {
+          name: editedCategoryName,
+          userId: userId,
+        },
+      },
+    });
 
     const { data, errors } = await updateCategory({
       variables: {
@@ -78,6 +87,8 @@ const handleSaveEditedCategory = async (categoryId: number) => {
         },
       },
     });
+
+    console.log({data, errors});
 
     if (data.updateCategory) {
       setEditingCategoryId(null);

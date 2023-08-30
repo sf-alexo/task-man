@@ -32,7 +32,7 @@ export const CREATE_CATEGORY = gql`
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($id: Int!, $updateCategoryInput: updateCategoryInput!) {
+  mutation UpdateCategory($id: Float!, $updateCategoryInput: UpdateCategoryInput!) {
     updateCategory(id: $id, updateCategoryInput: $updateCategoryInput) {
       id
       name

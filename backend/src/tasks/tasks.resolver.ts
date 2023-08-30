@@ -18,6 +18,11 @@ export class TasksResolver {
     return this.tasksService.findTaskById(id);
   }
 
+  @Query(() => [Task])
+  async tasksByTaskId(@Args('taskId', { type: () => Int }) taskId: number): Promise<Task[]> {
+    return this.tasksService.getTasksByTaskId(taskId);
+  }
+
 
  @Mutation(() => Task) // Specify the return type here
   async createTask(@Args('createTaskInput') input: CreateTaskInput): Promise<Task> {

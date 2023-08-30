@@ -12,11 +12,11 @@ export class Task {
   @Field()
   name!: string;
 
-  @Column('date')
+  @Column()
   @Field()
   dateStart!: Date;
 
-  @Column('date')
+  @Column()
   @Field()
   dateEnd!: Date;
 

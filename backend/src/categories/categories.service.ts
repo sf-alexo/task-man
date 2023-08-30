@@ -22,6 +22,10 @@ export class CategoriesService {
   }
 
   async updateCategory(id: number, updateCategoryInput: UpdateCategoryInput): Promise<Category> {
+    try{
+
+
+    console.log({id, updateCategoryInput});
     const category = await this.categoryRepository.findOneBy({ id: id });
 
     if (!category) {
@@ -31,6 +35,10 @@ export class CategoriesService {
     Object.assign(category, updateCategoryInput);
 
     return this.categoryRepository.save(category);
+  } catch (error) {
+    console.error('An error occurred:', error);
+
+  }
   }
 
   async deleteCategory(id: number): Promise<void> {
