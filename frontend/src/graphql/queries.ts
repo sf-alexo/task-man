@@ -10,3 +10,15 @@ export const GET_CATEGORIES = gql`
     }
   }
 `;
+
+export const GET_TASKS_BY_TASK_ID = gql`
+  query GetTasksByTaskId($taskId: Int!) {
+    tasksByTaskId(taskId: $taskId) {
+      id
+      name
+      dateStart
+      dateEnd
+      taskId
+    }
+  }
+`;

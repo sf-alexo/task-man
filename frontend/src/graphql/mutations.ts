@@ -47,3 +47,15 @@ export const DELETE_CATEGORY = gql`
   }
 `;
 
+export const UPDATE_TASK= gql`
+  mutation UpdateTask($id: Int!, $updateTaskInput: UpdateTaskInput!) {
+    updateTask(id: $id, updateTaskInput: $updateTaskInput) {
+      id
+      name
+      dateStart
+      dateEnd
+      taskId
+    }
+  }
+`;
+

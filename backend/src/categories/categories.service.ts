@@ -24,8 +24,6 @@ export class CategoriesService {
   async updateCategory(id: number, updateCategoryInput: UpdateCategoryInput): Promise<Category> {
     try{
 
-
-    console.log({id, updateCategoryInput});
     const category = await this.categoryRepository.findOneBy({ id: id });
 
     if (!category) {

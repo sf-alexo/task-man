@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useMutation } from '@apollo/client';
+import { UPDATE_TASK } from './graphql/mutations';
 import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const EditTask: React.FC = () => {
@@ -11,6 +13,8 @@ const EditTask: React.FC = () => {
   const [taskName, setTaskName] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
+
+  const [updateTask] = useMutation(UPDATE_TASK);
 
   const handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
@@ -26,14 +30,17 @@ const EditTask: React.FC = () => {
 
   const handleEditTask = async () => {
     try {
-      const updatedTask = {
-        name: taskName,
-        dateStart: dateStart,
-        dateEnd: dateEnd,
-        taskId: Number(categoryId),
-      };
-
-      await axios.put(`http://localhost:3000/tasks/${id}`, updatedTask);
+      await updateTask({
+        variables: {
+          id: Number(id),
+          updateTaskInput: {
+            name: taskName,
+            dateStart,
+            dateEnd,
+            taskId: Number(categoryId),
+          },
+        },
+      });
       navigate(`/${categoryName}/${categoryId}`); // Redirect back to TaskList page
     } catch (error) {
       console.error(error);

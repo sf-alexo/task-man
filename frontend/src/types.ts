@@ -5,4 +5,10 @@ export type Category = {
   userId: number;
 };
 
-
+export type Task = {
+  id: number;
+  name: string;
+  dateStart: Date;
+  dateEnd: Date;
+  taskId: number;
+};
