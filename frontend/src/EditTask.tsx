@@ -1,20 +1,41 @@
-import { useMutation } from '@apollo/client';
-import { UPDATE_TASK } from './graphql/mutations';
-import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_TASK } from './graphql/queries';
+import { UPDATE_TASK } from './graphql/mutations'; // Import your queries and mutations
 
 const EditTask: React.FC = () => {
-  const { categoryId } = useParams();
-  const { categoryName } = useParams();
-  const { id } = useParams();
+  const { categoryId, categoryName, id } = useParams();
   const navigate = useNavigate();
 
   const [taskName, setTaskName] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
 
+  // Define a default value for id
+  const taskId = id ? parseInt(id) : 0;
+
+  const { loading, error, data } = useQuery(GET_TASK, {
+    variables: { id: taskId },
+    skip: taskId === 0, // Skip the query if taskId is not available
+  });
+
   const [updateTask] = useMutation(UPDATE_TASK);
+
+  useEffect(() => {
+    // If data is available from the query, prepopulate the form fields
+    if (data && data.task) {
+      const task = data.task;
+      setTaskName(task.name);
+          // Parse and format dateStart and dateEnd
+    const startDate = new Date(task.dateStart);
+    const endDate = new Date(task.dateEnd);
+    
+    setDateStart(startDate.toISOString().slice(0, 10)); // Format as "yyyy-mm-dd"
+    setDateEnd(endDate.toISOString().slice(0, 10)); //
+ 
+    }
+  }, [data]);
 
   const handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
@@ -51,22 +72,14 @@ const EditTask: React.FC = () => {
     navigate(`/${categoryName}/${categoryId}`); // Redirect back to TaskList page
   };
 
-  useEffect(() => {
-    const fetchTask = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/tasks/id/${id}`);
-        console.log(response.data);
-        const task = response.data;
-        setTaskName(task.name);
-        setDateStart(task.dateStart);
-        setDateEnd(task.dateEnd);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-    fetchTask();
-  }, [id]);
+  if (error) {
+    console.error(error);
+    return <p>Error loading task data.</p>;
+  }
 
   return (
     <div>

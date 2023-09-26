@@ -22,3 +22,15 @@ export const GET_TASKS_BY_TASK_ID = gql`
     }
   }
 `;
+
+export const GET_TASK = gql`
+  query GetTask($id: Int!) {
+    task(id: $id) {
+      id
+      name
+      dateStart
+      dateEnd
+      taskId
+    }
+  }
+`;
