@@ -47,6 +47,18 @@ export const DELETE_CATEGORY = gql`
   }
 `;
 
+export const CREATE_TASK = gql`
+  mutation CreateTask($createTaskInput: CreateTaskInput!) {
+    createTask(createTaskInput: $createTaskInput) {
+      id
+      name
+      dateStart
+      dateEnd
+      taskId
+    }
+  }
+`;
+
 export const UPDATE_TASK= gql`
   mutation UpdateTask($id: Int!, $updateTaskInput: UpdateTaskInput!) {
     updateTask(id: $id, updateTaskInput: $updateTaskInput) {
